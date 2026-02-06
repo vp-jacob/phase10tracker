@@ -1,19 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import PlayerSetup from './pages/PlayerSetup'
+import { useGameState } from './hooks/useGameState'
 // import Scoreboard from './pages/Scoreboard'
 
 function App() {
   const [screen, setScreen] = useState('setup') // 'setup' | 'game'
-  const [players, setPlayers] = useState([])
+  const {
+    players,
+    currentRound,
+    gameOver,
+    winner,
+    startGame,
+    recordRound,
+    getStandings,
+    resetGame,
+    hasSavedGame
+  } = useGameState()
+
+  // Check for saved game on mount
+  useEffect(() => {
+    if (hasSavedGame() && players.length > 0) {
+      setScreen('game')
+    }
+  }, [hasSavedGame, players.length])
 
   const handleStartGame = (playerList) => {
-    setPlayers(playerList)
+    startGame(playerList)
     setScreen('game')
   }
 
   const handleNewGame = () => {
-    setPlayers([])
+    resetGame()
     setScreen('setup')
   }
 
@@ -31,13 +49,30 @@ function App() {
         {screen === 'game' && (
           <div className="container">
             <div className="card">
-              <h2>Game in Progress</h2>
-              <p>Players: {players.map(p => p.name).join(', ')}</p>
-              <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
-                Scoreboard coming soon...
-              </p>
+              <h2>Round {currentRound}</h2>
+              {gameOver ? (
+                <div className="winner-display">
+                  <h3>🏆 {winner?.name} Wins!</h3>
+                  <p>Final Score: {winner?.totalScore}</p>
+                </div>
+              ) : (
+                <p>Scoreboard coming soon...</p>
+              )}
+              
+              <div className="standings">
+                <h3>Standings</h3>
+                {getStandings().map((player, index) => (
+                  <div key={player.id} className="player-standing">
+                    <span className="rank">#{index + 1}</span>
+                    <span className="name">{player.name}</span>
+                    <span className="phase">Phase {player.currentPhase}</span>
+                    <span className="score">{player.totalScore} pts</span>
+                  </div>
+                ))}
+              </div>
+              
               <button className="secondary" onClick={handleNewGame} style={{ marginTop: '1rem' }}>
-                Back to Setup
+                New Game
               </button>
             </div>
           </div>
