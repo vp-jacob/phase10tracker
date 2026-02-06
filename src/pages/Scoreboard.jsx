@@ -1,4 +1,4 @@
-import { getPhaseDescription } from '../utils/phase10'
+import { getPhaseDescription, TOTAL_PHASES } from '../utils/phase10'
 import './Scoreboard.css'
 
 function Scoreboard({ 
@@ -10,23 +10,49 @@ function Scoreboard({
   onAddScores, 
   onNewGame 
 }) {
+  // Calculate stats for game over screen
+  const getGameStats = () => {
+    const totalRounds = currentRound - 1
+    const highestScore = Math.max(...players.map(p => p.totalScore))
+    const lowestScore = Math.min(...players.map(p => p.totalScore))
+    const avgScore = Math.round(players.reduce((sum, p) => sum + p.totalScore, 0) / players.length)
+    return { totalRounds, highestScore, lowestScore, avgScore }
+  }
+
   return (
     <div className="scoreboard">
       <div className="container">
-        {/* Game Over Banner */}
+        {/* Game Over Screen */}
         {gameOver && winner && (
-          <div className="winner-banner">
-            <div className="trophy">🏆</div>
-            <h2>{winner.name} Wins!</h2>
-            <p>Completed all 10 phases with {winner.totalScore} points</p>
-          </div>
+          <>
+            <div className="winner-banner">
+              <div className="trophy">🏆</div>
+              <h2>{winner.name} Wins!</h2>
+              <p>Completed all {TOTAL_PHASES} phases with {winner.totalScore} points</p>
+            </div>
+
+            <div className="game-stats">
+              <div className="stat">
+                <span className="stat-value">{getGameStats().totalRounds}</span>
+                <span className="stat-label">Rounds</span>
+              </div>
+              <div className="stat">
+                <span className="stat-value">{getGameStats().avgScore}</span>
+                <span className="stat-label">Avg Score</span>
+              </div>
+            </div>
+
+            <h3 className="final-standings-title">Final Standings</h3>
+          </>
         )}
 
-        {/* Round Header */}
-        <div className="round-header">
-          <span className="round-label">Round</span>
-          <span className="round-number">{currentRound}</span>
-        </div>
+        {/* Round Header (only when game in progress) */}
+        {!gameOver && (
+          <div className="round-header">
+            <span className="round-label">Round</span>
+            <span className="round-number">{currentRound}</span>
+          </div>
+        )}
 
         {/* Player Cards */}
         <div className="player-cards">
@@ -37,13 +63,21 @@ function Scoreboard({
                 gameOver && winner?.id === player.id ? 'winner' : ''
               }`}
             >
-              <div className="player-rank">#{index + 1}</div>
+              <div className="player-rank">
+                {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+              </div>
               
               <div className="player-info">
                 <h3 className="player-name">{player.name}</h3>
                 <div className="phase-info">
-                  <span className="phase-number">Phase {player.currentPhase}</span>
-                  <span className="phase-desc">{getPhaseDescription(player.currentPhase)}</span>
+                  <span className="phase-number">
+                    {player.currentPhase === TOTAL_PHASES && player.phaseComplete 
+                      ? '✓ Complete!' 
+                      : `Phase ${player.currentPhase}`}
+                  </span>
+                  {player.currentPhase <= TOTAL_PHASES && !player.phaseComplete && (
+                    <span className="phase-desc">{getPhaseDescription(player.currentPhase)}</span>
+                  )}
                 </div>
               </div>
 
@@ -52,7 +86,7 @@ function Scoreboard({
                 <span className="score-label">pts</span>
               </div>
 
-              {player.phaseComplete && (
+              {player.phaseComplete && !gameOver && (
                 <div className="complete-badge">✓</div>
               )}
             </div>
@@ -67,7 +101,7 @@ function Scoreboard({
             </button>
           )}
           <button className="secondary" onClick={onNewGame}>
-            {gameOver ? 'Play Again' : 'New Game'}
+            {gameOver ? '🎴 Play Again' : 'New Game'}
           </button>
         </div>
       </div>
