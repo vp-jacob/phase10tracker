@@ -1,0 +1,138 @@
+/* Phase 10 Tracker - Global Styles */
+
+:root {
+  /* Colors */
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  
+  /* Backgrounds */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #334155;
+  
+  /* Text */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+.card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+button.primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+button.primary:hover {
+  background-color: var(--primary-dark);
+}
+
+button.secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--secondary);
+}
+
+button.secondary:hover {
+  background-color: var(--bg-card);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form Elements */
+input, select {
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--secondary);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Typography */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
