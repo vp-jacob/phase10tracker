@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import PlayerSetup from './pages/PlayerSetup'
+import Scoreboard from './pages/Scoreboard'
 import { useGameState } from './hooks/useGameState'
-// import Scoreboard from './pages/Scoreboard'
 
 function App() {
   const [screen, setScreen] = useState('setup') // 'setup' | 'game'
@@ -35,6 +35,13 @@ function App() {
     setScreen('setup')
   }
 
+  const handleAddScores = () => {
+    // TODO: Open score input modal/screen
+    // For now, just log
+    console.log('Add scores clicked - Score input coming soon')
+    alert('Score input component coming soon!')
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -47,35 +54,15 @@ function App() {
         )}
         
         {screen === 'game' && (
-          <div className="container">
-            <div className="card">
-              <h2>Round {currentRound}</h2>
-              {gameOver ? (
-                <div className="winner-display">
-                  <h3>🏆 {winner?.name} Wins!</h3>
-                  <p>Final Score: {winner?.totalScore}</p>
-                </div>
-              ) : (
-                <p>Scoreboard coming soon...</p>
-              )}
-              
-              <div className="standings">
-                <h3>Standings</h3>
-                {getStandings().map((player, index) => (
-                  <div key={player.id} className="player-standing">
-                    <span className="rank">#{index + 1}</span>
-                    <span className="name">{player.name}</span>
-                    <span className="phase">Phase {player.currentPhase}</span>
-                    <span className="score">{player.totalScore} pts</span>
-                  </div>
-                ))}
-              </div>
-              
-              <button className="secondary" onClick={handleNewGame} style={{ marginTop: '1rem' }}>
-                New Game
-              </button>
-            </div>
-          </div>
+          <Scoreboard
+            players={players}
+            currentRound={currentRound}
+            gameOver={gameOver}
+            winner={winner}
+            standings={getStandings()}
+            onAddScores={handleAddScores}
+            onNewGame={handleNewGame}
+          />
         )}
       </main>
     </div>
