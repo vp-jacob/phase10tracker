@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-
-// Pages will be imported here as they're built
-// import PlayerSetup from './pages/PlayerSetup'
+import PlayerSetup from './pages/PlayerSetup'
 // import Scoreboard from './pages/Scoreboard'
 
 function App() {
@@ -27,22 +25,17 @@ function App() {
       
       <main className="app-main">
         {screen === 'setup' && (
-          <div className="container">
-            <div className="card">
-              <h2>Welcome to Phase 10 Tracker</h2>
-              <p>Set up your game to get started.</p>
-              <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
-                Player setup screen coming soon...
-              </p>
-            </div>
-          </div>
+          <PlayerSetup onStartGame={handleStartGame} />
         )}
         
         {screen === 'game' && (
           <div className="container">
             <div className="card">
               <h2>Game in Progress</h2>
-              <p>Scoreboard coming soon...</p>
+              <p>Players: {players.map(p => p.name).join(', ')}</p>
+              <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
+                Scoreboard coming soon...
+              </p>
               <button className="secondary" onClick={handleNewGame} style={{ marginTop: '1rem' }}>
                 Back to Setup
               </button>
