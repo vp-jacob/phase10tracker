@@ -1,0 +1,155 @@
+/* ScoreInput Modal styles */
+
+.score-input-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.score-input-modal {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.score-input-modal h2 {
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+/* Scoring Reference */
+.scoring-reference {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.scoring-reference strong {
+  color: var(--text-primary);
+}
+
+/* Score Inputs */
+.score-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.score-row {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-sm) var(--space-md);
+  align-items: center;
+  border: 2px solid transparent;
+}
+
+.score-row.has-error {
+  border-color: var(--error);
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.player-name {
+  font-weight: 600;
+}
+
+.player-phase {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.score-field {
+  position: relative;
+}
+
+.score-field input {
+  width: 80px;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: var(--space-sm);
+}
+
+.score-field .error-text {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  font-size: 0.75rem;
+  color: var(--error);
+  text-align: center;
+}
+
+.phase-checkbox {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--bg-secondary);
+}
+
+.phase-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--success);
+}
+
+.checkbox-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.phase-checkbox:has(input:checked) .checkbox-label {
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: var(--space-md);
+}

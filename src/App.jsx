@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import PlayerSetup from './pages/PlayerSetup'
 import Scoreboard from './pages/Scoreboard'
+import ScoreInput from './components/ScoreInput'
 import { useGameState } from './hooks/useGameState'
 
 function App() {
   const [screen, setScreen] = useState('setup') // 'setup' | 'game'
+  const [showScoreInput, setShowScoreInput] = useState(false)
   const {
     players,
     currentRound,
@@ -36,10 +38,16 @@ function App() {
   }
 
   const handleAddScores = () => {
-    // TODO: Open score input modal/screen
-    // For now, just log
-    console.log('Add scores clicked - Score input coming soon')
-    alert('Score input component coming soon!')
+    setShowScoreInput(true)
+  }
+
+  const handleScoreSubmit = (roundResults) => {
+    recordRound(roundResults)
+    setShowScoreInput(false)
+  }
+
+  const handleScoreCancel = () => {
+    setShowScoreInput(false)
   }
 
   return (
@@ -65,6 +73,14 @@ function App() {
           />
         )}
       </main>
+
+      {showScoreInput && (
+        <ScoreInput
+          players={players}
+          onSubmit={handleScoreSubmit}
+          onCancel={handleScoreCancel}
+        />
+      )}
     </div>
   )
 }
