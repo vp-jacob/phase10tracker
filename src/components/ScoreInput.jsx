@@ -15,9 +15,18 @@ function ScoreInput({ players, onSubmit, onCancel }) {
   const handleScoreChange = (playerId, value) => {
     // Allow empty or numeric input
     if (value === '' || /^\d+$/.test(value)) {
+      const numericScore = value === '' ? 0 : parseInt(value, 10)
+      
+      // Auto-mark phase complete if score < 50
+      const autoComplete = numericScore < 50
+      
       setScores(prev => ({
         ...prev,
-        [playerId]: { ...prev[playerId], score: value }
+        [playerId]: { 
+          ...prev[playerId], 
+          score: value,
+          completedPhase: autoComplete ? true : prev[playerId].completedPhase
+        }
       }))
       // Clear error
       if (errors[playerId]) {
@@ -37,19 +46,33 @@ function ScoreInput({ players, onSubmit, onCancel }) {
     const newErrors = {}
     let isValid = true
 
+    // Check each player's score
     players.forEach(player => {
       const scoreData = scores[player.id]
-      if (scoreData.score === '') {
-        newErrors[player.id] = 'Enter a score'
-        isValid = false
-      } else if (!isValidScore(scoreData.score)) {
+      const scoreValue = scoreData.score === '' ? '0' : scoreData.score
+      
+      if (!isValidScore(scoreValue)) {
         newErrors[player.id] = 'Invalid score'
         isValid = false
-      } else if (parseInt(scoreData.score, 10) > 500) {
+      } else if (parseInt(scoreValue, 10) > 500) {
         newErrors[player.id] = 'Score too high'
         isValid = false
       }
     })
+
+    // Check that only one player has 0
+    const zeroScorePlayers = players.filter(player => {
+      const scoreData = scores[player.id]
+      const scoreValue = scoreData.score === '' ? 0 : parseInt(scoreData.score, 10)
+      return scoreValue === 0
+    })
+
+    if (zeroScorePlayers.length > 1) {
+      zeroScorePlayers.forEach(player => {
+        newErrors[player.id] = 'Only one player can score 0'
+      })
+      isValid = false
+    }
 
     setErrors(newErrors)
     return isValid
@@ -60,11 +83,14 @@ function ScoreInput({ players, onSubmit, onCancel }) {
     
     if (!validate()) return
 
-    const roundResults = players.map(player => ({
-      playerId: player.id,
-      score: parseInt(scores[player.id].score, 10),
-      completedPhase: scores[player.id].completedPhase
-    }))
+    const roundResults = players.map(player => {
+      const scoreValue = scores[player.id].score === '' ? 0 : parseInt(scores[player.id].score, 10)
+      return {
+        playerId: player.id,
+        score: scoreValue,
+        completedPhase: scores[player.id].completedPhase
+      }
+    })
 
     onSubmit(roundResults)
   }
