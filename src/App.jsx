@@ -2,22 +2,25 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import PlayerSetup from './pages/PlayerSetup'
 import Scoreboard from './pages/Scoreboard'
+import GameHistory from './pages/GameHistory'
 import ScoreInput from './components/ScoreInput'
 import { useGameState } from './hooks/useGameState'
 
 function App() {
-  const [screen, setScreen] = useState('setup') // 'setup' | 'game'
+  const [screen, setScreen] = useState('setup') // 'setup' | 'game' | 'history'
   const [showScoreInput, setShowScoreInput] = useState(false)
   const {
     players,
     currentRound,
     gameOver,
     winner,
+    gameHistory,
     startGame,
     recordRound,
     getStandings,
     resetGame,
-    hasSavedGame
+    hasSavedGame,
+    clearGameHistory
   } = useGameState()
 
   // Check for saved game on mount
@@ -54,6 +57,15 @@ function App() {
     <div className="app">
       <header className="app-header">
         <h1>🎴 Phase 10 Tracker</h1>
+        {screen !== 'history' && (
+          <button 
+            className="history-button" 
+            onClick={() => setScreen('history')}
+            title="Game History"
+          >
+            📜
+          </button>
+        )}
       </header>
       
       <main className="app-main">
@@ -70,6 +82,14 @@ function App() {
             standings={getStandings()}
             onAddScores={handleAddScores}
             onNewGame={handleNewGame}
+          />
+        )}
+
+        {screen === 'history' && (
+          <GameHistory
+            games={gameHistory}
+            onBack={() => setScreen(players.length > 0 ? 'game' : 'setup')}
+            onClearHistory={clearGameHistory}
           />
         )}
       </main>

@@ -9,13 +9,32 @@
 .app-header {
   background-color: var(--bg-secondary);
   padding: var(--space-md) var(--space-lg);
-  text-align: center;
   border-bottom: 1px solid var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .app-header h1 {
   margin: 0;
   font-size: 1.5rem;
+}
+
+.history-button {
+  position: absolute;
+  right: var(--space-lg);
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.history-button:hover {
+  background: var(--bg-card);
 }
 
 .app-main {
