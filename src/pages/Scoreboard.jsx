@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { getPhaseDescription, TOTAL_PHASES } from '../utils/phase10'
+import ConfirmDialog from '../components/ConfirmDialog'
 import './Scoreboard.css'
 
 function Scoreboard({ 
@@ -10,6 +12,21 @@ function Scoreboard({
   onAddScores, 
   onNewGame 
 }) {
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  const handleNewGameClick = () => {
+    // If game is over, no need to confirm
+    if (gameOver) {
+      onNewGame()
+    } else {
+      setShowConfirm(true)
+    }
+  }
+
+  const handleConfirmNewGame = () => {
+    setShowConfirm(false)
+    onNewGame()
+  }
   // Calculate stats for game over screen
   const getGameStats = () => {
     const totalRounds = currentRound - 1
@@ -100,11 +117,22 @@ function Scoreboard({
               Enter Round Scores
             </button>
           )}
-          <button className="secondary" onClick={onNewGame}>
+          <button className="secondary" onClick={handleNewGameClick}>
             {gameOver ? '🎴 Play Again' : 'New Game'}
           </button>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showConfirm}
+        title="Start New Game?"
+        message="This will end your current game and all progress will be lost. Are you sure?"
+        confirmText="Start New Game"
+        cancelText="Keep Playing"
+        onConfirm={handleConfirmNewGame}
+        onCancel={() => setShowConfirm(false)}
+        danger
+      />
     </div>
   )
 }
